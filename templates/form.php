@@ -6,9 +6,7 @@
     <p class="error"><?= h(implode(' | ', $errors)) ?></p>
   <?php endif; ?>
 
-  <form id="surveyForm" method="POST" action="./index.php">
-    <div id="ajaxResult" style="margin:12px 0;"></div>
-    
+  <form method="POST" action="./index.php">
     <label>Ім’я респондента</label>
     <input name="name" required value="<?= h($old['name'] ?? '') ?>">
 
