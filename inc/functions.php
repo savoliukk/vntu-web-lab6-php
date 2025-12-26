@@ -30,3 +30,28 @@ function saveSurveyResponse(string $dir, array $data): string {
 
   return $filename;
 }
+
+
+function saveSurveyToDb(PDO $pdo, array $row): int {
+  $sql = "INSERT INTO survey_responses
+    (submitted_at, name, email, q1_lang, q2_hours, q3_ai, q4_hard, q5_wish, file_name, ip, user_agent)
+    VALUES
+    (:submitted_at, :name, :email, :q1_lang, :q2_hours, :q3_ai, :q4_hard, :q5_wish, :file_name, :ip, :user_agent)";
+
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([
+    ':submitted_at' => $row['submitted_at'],
+    ':name' => $row['name'],
+    ':email' => $row['email'],
+    ':q1_lang' => $row['q1_lang'],
+    ':q2_hours' => $row['q2_hours'],
+    ':q3_ai' => $row['q3_ai'],
+    ':q4_hard' => $row['q4_hard'],
+    ':q5_wish' => $row['q5_wish'],
+    ':file_name' => $row['file_name'],
+    ':ip' => $row['ip'],
+    ':user_agent' => $row['user_agent'],
+  ]);
+
+  return (int)$pdo->lastInsertId();
+}

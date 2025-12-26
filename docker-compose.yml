@@ -1,7 +1,42 @@
 services:
   web:
-    image: php:8.3-apache
+    build: .
     ports:
       - "8080:80"
     volumes:
       - ./:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: lab6
+      MYSQL_USER: lab6_user
+      MYSQL_PASSWORD: lab6_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot_pass"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_ABSOLUTE_URI: http://localhost:8081/
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
