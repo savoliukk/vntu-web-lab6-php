@@ -13,9 +13,9 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: lab6
-      MYSQL_USER: lab6_user
-      MYSQL_PASSWORD: lab6_pass
+      MYSQL_DATABASE: lab7
+      MYSQL_USER: lab7_user
+      MYSQL_PASSWORD: lab7_pass
       MYSQL_ROOT_PASSWORD: root_pass
     volumes:
       - db_data:/var/lib/mysql
